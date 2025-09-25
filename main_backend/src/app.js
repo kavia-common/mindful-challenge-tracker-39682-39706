@@ -1,5 +1,6 @@
 const cors = require('cors');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
@@ -38,18 +39,24 @@ app.use('/docs', swaggerUi.serve, (req, res, next) => {
   swaggerUi.setup(dynamicSpec)(req, res, next);
 });
 
-// Parse JSON request body
+// Parse JSON request body and cookies
 app.use(express.json());
+app.use(cookieParser());
 
 // Mount routes
 app.use('/', routes);
 
-// Error handling middleware
+// Error handling middleware (Ocean Professional)
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
+  // eslint-disable-next-line no-console
+  console.error(err.stack || err);
+  const status = err.status || 500;
+  res.status(status).json({
     status: 'error',
-    message: 'Internal Server Error',
+    theme: 'Ocean Professional',
+    color: '#EF4444',
+    code: err.code || 'internal_error',
+    message: status === 500 ? 'An unexpected error occurred. Please try again.' : (err.message || 'Request failed'),
   });
 });
 
