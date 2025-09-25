@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/mindful-challenge-tracker-39682-39706/main_backend"
+}
